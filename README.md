@@ -12,7 +12,7 @@ A platform for conducting research in the few-class regime.
 
 ## Introduction
 
-Few-Class-Arena (FCA) is an open platform written in PyTorch developed on top of the [OpenMMLab](https://openmmlab.com/) project. It provides an open source toolbox for conducting research in the few-class regime. FCA encapsulates the underlying tedious coding and configurations for each experiment, and provides a convenient interface for users to conduct large-scale experiments in batch. It saves a large amount of time for researchers without manually conducting experiment, gathering results from each individual experiment independently. Users can enjoy these features by specifying the configurations for different tasks including training and evaluation.
+Few-Class-Arena (FCA) is an open platform written in PyTorch developed on top of the [OpenMMLab](https://openmmlab.com/) project. It provides an open source toolbox for conducting research in the few-class regime (classification and detection systems whose dataset consists of few classes, typically <10). FCA encapsulates the underlying tedious coding and configurations for each experiment, and it provides a convenient interface for users to conduct large-scale experiments in batch. It saves a large amount of time for researchers by omitting the steps of manually conducting experiments and gathering results from each individual experiment independently. Users can enjoy these features by specifying the configurations for different tasks including training and evaluation.
 
 
 ### Major Features
@@ -24,7 +24,7 @@ Few-Class-Arena (FCA) is an open platform written in PyTorch developed on top of
 
 
 ## Installation
-Locate to the target folder for all repositories in your machine. Follow the instructions to install [Conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) with ```Python3.8``` version:
+Locate to the target folder in your machine. Follow the instructions to install [Conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) with ```Python3.8``` version:
 ```
 conda create --name openmmlab python=3.8 -y
 conda activate openmmlab
@@ -35,7 +35,7 @@ git clone https://github.com/few-class-arena/few-class-arena
 cd few-class-arena
 pip install -e .
 ```
-In case of bugs occur, follow the instructions (in https://mmpretrain.readthedocs.io/en/latest/get_started.html#installation) to install [OpenMMLab](https://openmmlab.com/) (where ```Few-Class Arena``` is built upon) from scratch:
+In case bugs occur, follow the instructions (in https://mmpretrain.readthedocs.io/en/latest/get_started.html#installation) to install [OpenMMLab](https://openmmlab.com/) (where ```Few-Class Arena``` is built upon) from scratch:
 ```
 cd ..
 git clone https://github.com/open-mmlab/mmpretrain.git
@@ -128,9 +128,9 @@ python3 tools/ncls/datasets/indoor67.py
 python3 tools/ncls/datasets/sun397.py
 python3 tools/ncls/datasets/textures47.py
 ```
-For ```ImageNet1K```, please to refer to [LSVRC2012](https://www.image-net.org/challenges/LSVRC/2012/index.php#).
+For ```ImageNet1K```, please refer to [LSVRC2012](https://www.image-net.org/challenges/LSVRC/2012/index.php#).
 
-Specify datasets, models and model EDIT files in ```./tools/ncls/ncls_datasets_models_EDIT.yaml``` in the following format:
+Specify datasets, models, and model EDIT files in ```./tools/ncls/ncls_datasets_models_EDIT.yaml``` in the following format:
 ```
 datasets:
   - <DATASET>:
@@ -153,7 +153,7 @@ models:
   resnet50_8xb32_in1k: ./configs/resnet/resnet50_8xb32_in1k_EDIT.py
   vgg16_8xb32_in1k: ./configs/vgg/vgg16_8xb32_in1k_EDIT.py
 ```
-A model EDIT file is a special file in ```FCA``` framework, based on which new configuration files are generated for few-class purpose.
+A model EDIT file is a special base file in the ```FCA``` from which new configuration files are generated. This file defines the method for dataset, model, training and testing models and similarity such that downstream configuration files can be generated for specific experiments by a special marker ```# edit```, which helps the script to generate a list of files when varying the number of classes.
 
 Then generate configs automatically by
 ```
@@ -161,7 +161,7 @@ python3 tools/ncls/gen_ncls_models_configs_EDIT.py
 ```
 
 
-### Convert dataset format
+### Convert the dataset format
 Specify ```meta_data_root``` where the meta data root is located in your current file system in ```datasets/ds.yaml``` in the following format:
 ```
 meta_data_root: '<PATH_TO_DATASETS>'
@@ -171,7 +171,7 @@ Example:
 ```
 meta_data_root: /datasets
 ```
-Specify datasets, number of classes in each full dataset, models and model EDIT files in ```./tools/ncls/ncls_datasets_models_EDIT.yaml``` in the following format:
+Specify datasets, the number of classes in each full dataset, and the models and model EDIT files in ```./tools/ncls/ncls_datasets_models_EDIT.yaml``` in the following format:
 ```
 datasets:
   - <DATASET>:
@@ -195,16 +195,14 @@ models:
   resnet50_8xb32_in1k: ./configs/resnet/resnet50_8xb32_in1k_EDIT.py
   vgg16_8xb32_in1k: ./configs/vgg/vgg16_8xb32_in1k_EDIT.py
 ```
-A model EDIT file is a special base file upon which new configuration files are generated. This file defines the structure of recipe for training and testing a model such that downstream configuration files can be generated for specific experiments by a special marker ```# edit```, which helps the script to generate a list of files when varying the number of classes.
-
-Then run
+Then run,
 ```
 python3 tools/dataset_converters/convert_ncls.py
 ```
 
 
 ### Generate ncls meta files (for ImageNet1K)
-Specify number of classes by ```-ncls <NUM_OF_CLASSES>``` in ```tools/ncls/gen_ncls_meta_files.sh```. Replace ```<NUM_OF_CLASSES>``` with the number of classes. Note that one experiment with a specific ```ncls``` should be specified in one line. For example, if you would like to experiment with ```ncls=[2, 3, 4]```, then you would have three lines where each contains ```ncls 2```, ```ncls 3``` and ```ncls 4```, respectively.
+Specify the number of classes by ```-ncls <NUM_OF_CLASSES>``` in ```tools/ncls/gen_ncls_meta_files.sh```. Replace ```<NUM_OF_CLASSES>``` with the number of classes. Note that one experiment with a specific ```ncls``` should be specified in one line. For example, if you would like to experiment with ```ncls=[2, 3, 4]```, then you would have three lines where each contains ```ncls 2```, ```ncls 3``` and ```ncls 4```, respectively.
 
 ```tools/ncls/gen_ncls_meta_files.sh``` already provides an example for ```ncls=[2, 3, 4, 5, 10, 100, 200, 400, 600, 800]```.
 
@@ -215,7 +213,7 @@ bash tools/ncls/gen_ncls_meta_files.sh
 
 
 ### Download pre-trained model weights
-Specify models and the links to download in ```tools/ncls/config_to_url.yaml``` in the following format:
+Specify the models and links to download in ```tools/ncls/config_to_url.yaml``` in the following format:
 ```
 <MODEL>: <LINK_OF_WEIGHTS>
 ```
@@ -233,7 +231,7 @@ python3 tools/ncls/download_weights.py
 ### FCA-Full
 ```FCA-Full``` evaluates models pre-trained on full datasets with the original number of classes (e.g. 1000 in ImageNet1K). Please refer to (#download-pre-trained-model-weights) regarding the details of downloading pre-trained weights from [MMPreTrain](https://openmmlab.com/).
 
-Specify datasets, architectures and models in the ```gen_configs.yaml``` in the following format:
+Specify datasets, architectures, and models in the ```gen_configs.yaml``` in the following format:
 ```
 datasets:
   - <DATASET>:
@@ -279,7 +277,7 @@ For ```ImageNet1K``` use ```./tools/ncls/fca-full-IN1K.py```.
 
 ### FCA-Sub
 #### Training sub-models
-```FCA-Sub``` generates commands to train models on subsets with fewer classes. Note that the classes in the few-class subsets are randomly sampled from the full class with seed numbers. By default, we sample 5 subsets for each number of classes (ncls). The seed starts from ```0``` and will increment by 1 for each new subset.
+```FCA-Sub``` generates commands to train models on subsets with fewer classes. Note that the classes in the few-class subsets are randomly sampled from the full class using seed numbers. By default, we sample 5 subsets for each number of classes (ncls). The seed starts from ```0``` and will increment by 1 for each new subset.
 
 Specify datasets, architectures and models in the ```gen_configs.yaml``` in the following format:
 ```
@@ -324,11 +322,11 @@ python3 tools/ncls/fca-sub.py
 ```
 Then all training commands are generated in ```./tools/ncls/batch_train_<TIMESTAMP>.sh``` where ```<TIMESTAMP>``` will be specified by the script automatically.
 
-If you have enough hardware (e.g. GPUs) support to train all these models simultaneously, a single command would be enough:
+If you have adequate hardware (e.g. GPUs) support to train all these models simultaneously, a single command would be enough:
 ```
 bash ./tools/ncls/batch_train_<TIMESTAMP>.sh
 ```
-However, this will easily get your server saturated. In practically, a user might want to have control of each model's training. One can simply view training scripts, copy and paste each command in the command line:
+However, this will easily get your server saturated. In practice, a user might want to have control of each model's training. One can simply view training scripts, and copy and paste each command in the command line:
 ```
 vim ./tools/ncls/batch_train_<TIMESTAMP>.sh
 ```
@@ -347,11 +345,11 @@ For ```ImageNet1K``` use ```./tools/ncls/fca-sub-IN1K.py```.
 
 
 #### Testing sub-models
-Specify datasets, architectures and models in the ```gen_configs.yaml``` in the format described in previous sections. Then run
+Specify datasets, architectures, and models in the ```gen_configs.yaml``` in the format described in previous sections. Then run
 ```
 python3 tools/ncls/fca-sub-res.py
 ```
-which will search and evaluate the latest sub-models in ```./work_dirs```. Results will be saved a log file saved with a timestamp under the ```./work_dirs/eval``` folder. Each line of the log file saves one evaluation result in this format: ```<DATASET_NAME>\t<MODEL>\t<NCLS>\t<SEED>\t<TOP1>\t<TOP5>\n```.
+which will search and evaluate the latest sub-models in ```./work_dirs```. Results will be saved in a log file with a timestamp under the ```./work_dirs/eval``` folder. Each line of the log file saves one evaluation result in this format: ```<DATASET_NAME>\t<MODEL>\t<NCLS>\t<SEED>\t<TOP1>\t<TOP5>\n```.
 
 For ```ImageNet1K``` use ```./tools/ncls/fca-sub-res-IN1K.py```.
 
@@ -395,7 +393,7 @@ Results will be saved in a log file with a timestamp in ```./work_dirs/sim```, w
 
 ## Contributing
 
-We appreciate all contributions to improve Few-Class-Arena. Please fork this repository and make a pull request. We will review the changes and incorporate them into existing code.
+We appreciate all contributions to improve Few-Class-Arena. Please fork this repository and make a pull request. We will review the changes and incorporate them into the existing code.
 
 
 ## Acknowledgement
