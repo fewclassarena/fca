@@ -66,6 +66,16 @@ Please refer to [installation documentation](https://mmpretrain.readthedocs.io/e
 The following scripts are newly designed and incorporated in the existing [MMPreTrain](https://openmmlab.com/) framework:
 ```
 few-class-arena/
+    |--configs/
+        |--_base_/
+            |--datasets/
+                ...
+            |--models/
+                ...
+            |--schedules/
+            |--sim.py
+            ...
+        ...
     |--datasets/
         |--caltech101.py
         |--caltech256.py
