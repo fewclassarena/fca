@@ -1,0 +1,398 @@
+# Few-Class Arena
+
+A platform for conducting research in the few-class regime.
+
+[Introduction](#introduction) |
+[Major Features](#major-features) |
+[Installation](#installation) |
+[Versions](#versions) |
+[Repository Structure](#repository-structure) |
+[User Guidelines](#user-guidelines)
+
+
+## Introduction
+
+Few-Class-Arena (FCA) is an open platform written in PyTorch developed on top of the [OpenMMLab](https://openmmlab.com/) project. It provides an open source toolbox for conducting research in the few-class regime. FCA encapsulates the underlying tedious coding and configurations for each experiment, and provides a convenient interface for users to conduct large-scale experiments in batch. It saves a large amount of time for researchers without manually conducting experiment, gathering results from each individual experiment independently. Users can enjoy these features by specifying the configurations for different tasks including training and evaluation.
+
+
+### Major Features
+
+- Download pre-trained weights on large datasets in batch
+- Automatically generate training scripts
+- Train and evaluate models with various specifications including architecture, weight and number of classes 
+- Gather results of experiments with various specifications
+
+
+## Installation
+Locate to the target folder for all repositories in your machine. Follow the instructions to install [Conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) with ```Python3.8``` version:
+```
+conda create --name openmmlab python=3.8 -y
+conda activate openmmlab
+```
+Build from this repository:
+```
+git clone https://github.com/few-class-arena/few-class-arena
+cd few-class-arena
+pip install -e .
+```
+In case of bugs occur, follow the instructions (in https://mmpretrain.readthedocs.io/en/latest/get_started.html#installation) to install [OpenMMLab](https://openmmlab.com/) (where ```Few-Class Arena``` is built upon) from scratch:
+```
+cd ..
+git clone https://github.com/open-mmlab/mmpretrain.git
+cd mmpretrain
+pip install -U openmim && mim install -e .
+pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu121
+mim install mmcv==2.1.0
+```
+
+
+## Versions
+
+Below are some commonly PyTorch and CUDA versions for NVIDIA GPUs:
+
+| GPU | PyTorch | CUDA |
+| -- | -- | -- |
+| NVIDIA TITAN Xp | 12.1 | cu121 |
+| NVIDIA RTX A5000 | 1.9.1 | cu111 |
+
+The version information can be obtained by:
+```
+python3 -c 'import torch; print(torch.__version__); print(torch.version.cuda)'
+```
+
+Please refer to [installation documentation](https://mmpretrain.readthedocs.io/en/latest/get_started.html) for more detailed installation and dataset preparation.
+
+## Repository Structure
+The following scripts are newly designed and incorporated in the existing [MMPreTrain](https://openmmlab.com/) framework:
+```
+few-class-arena/
+    |--datasets/
+        |--caltech101.py
+        |--caltech256.py
+        |--cifar100.py
+        |--cub200.py
+        |--ds.yaml
+        |--food101.py
+        |--gtsrb43.py
+        |--indoor67.py
+        |--sun397.py
+        |--textures47.py
+    |--dataset_converters/
+        |--convert_imagenet_ncls.py
+        |--convert_imagenet_noclsdir.py
+        |--convert_ncls.py
+    |--tools/
+        |--ncls/
+            |--config_to_url.yaml
+            |--download_weights.py
+            |--gen_configs.yaml
+            |--ncls_datasets_models_EDIT.yaml
+```
+The usage of each file will be illustrated in the following user guidelines.
+
+## User Guidelines
+Note that all scripts run in this main directory:
+```
+cd few-class-arena
+```
+
+
+### Generate configs for datasets and models
+Specify ```meta_data_root``` in
+```
+tools/ncls/datasets/ds.yaml
+```
+Download datasets:
+```
+python3 tools/ncls/datasets/<DATASET>.py
+```
+```FCA``` provides the following examples of scripts to download datasets:
+```
+python3 tools/ncls/datasets/caltech101.py
+python3 tools/ncls/datasets/caltech256.py
+python3 tools/ncls/datasets/cifar100.py
+python3 tools/ncls/datasets/cub200.py
+python3 tools/ncls/datasets/food101.py
+python3 tools/ncls/datasets/gtsrb43.py
+python3 tools/ncls/datasets/indoor67.py
+python3 tools/ncls/datasets/sun397.py
+python3 tools/ncls/datasets/textures47.py
+```
+For ```ImageNet1K```, please to refer to [LSVRC2012](https://www.image-net.org/challenges/LSVRC/2012/index.php#).
+
+Specify datasets, models and model EDIT files in ```./tools/ncls/ncls_datasets_models_EDIT.yaml``` in the following format:
+```
+datasets:
+  - <DATASET>:
+      ncls: <NUMBER_OF_CLASSES>
+  ...
+
+models:
+  <MODEL>: <PATH_TO_MODEL_EDIT_FILE>
+  ...
+```
+Example:
+```
+datasets:
+  - imagenet:
+      ncls: 1000
+  - caltech101:
+      ncls: 101
+
+models:
+  resnet50_8xb32_in1k: ./configs/resnet/resnet50_8xb32_in1k_EDIT.py
+  vgg16_8xb32_in1k: ./configs/vgg/vgg16_8xb32_in1k_EDIT.py
+```
+A model EDIT file is a special file in ```FCA``` framework, based on which new configuration files are generated for few-class purpose.
+
+Then generate configs automatically by
+```
+python3 tools/ncls/gen_ncls_models_configs_EDIT.py
+```
+
+
+### Convert dataset format
+Specify ```meta_data_root``` where the meta data root is located in your current file system in ```datasets/ds.yaml``` in the following format:
+```
+meta_data_root: '<PATH_TO_DATASETS>'
+```
+The meta data root is a directory to store all your datasets.
+Example:
+```
+meta_data_root: /datasets
+```
+Specify datasets, number of classes in each full dataset, models and model EDIT files in ```./tools/ncls/ncls_datasets_models_EDIT.yaml``` in the following format:
+```
+datasets:
+  - <DATASET>:
+      ncls: <NUMBER_OF_CLASSES>
+  ...
+
+models:
+  <MODEL>: <PATH_TO_MODEL_EDIT_FILE>
+  ...
+```
+Example:
+
+```
+datasets:
+  - imagenet:
+      ncls: 1000
+  - caltech101:
+      ncls: 101
+
+models:
+  resnet50_8xb32_in1k: ./configs/resnet/resnet50_8xb32_in1k_EDIT.py
+  vgg16_8xb32_in1k: ./configs/vgg/vgg16_8xb32_in1k_EDIT.py
+```
+A model EDIT file is a special base file upon which new configuration files are generated. This file defines the structure of recipe for training and testing a model such that downstream configuration files can be generated for specific experiments by a special marker ```# edit```, which helps the script to generate a list of files when varying the number of classes.
+
+Then run
+```
+python3 tools/dataset_converters/convert_ncls.py
+```
+
+
+### Generate ncls meta files (for ImageNet1K)
+Specify number of classes by ```-ncls <NUM_OF_CLASSES>``` in ```tools/ncls/gen_ncls_meta_files.sh```. Replace ```<NUM_OF_CLASSES>``` with the number of classes. Note that one experiment with a specific ```ncls``` should be specified in one line. For example, if you would like to experiment with ```ncls=[2, 3, 4]```, then you would have three lines where each contains ```ncls 2```, ```ncls 3``` and ```ncls 4```, respectively.
+
+```tools/ncls/gen_ncls_meta_files.sh``` already provides an example for ```ncls=[2, 3, 4, 5, 10, 100, 200, 400, 600, 800]```.
+
+Then run
+```
+bash tools/ncls/gen_ncls_meta_files.sh
+```
+
+
+### Download pre-trained model weights
+Specify models and the links to download in ```tools/ncls/config_to_url.yaml``` in the following format:
+```
+<MODEL>: <LINK_OF_WEIGHTS>
+```
+where ```<MODEL>``` is replaced with the specific model and change ```<LINK_OF_WEIGHTS>``` to the link to download the weights.
+Example:
+```
+resnet18_8xb32_in1k: https://download.openmmlab.com/mmclassification/v0/resnet/resnet18_8xb32_in1k_20210831-fbbb1da6.pth
+```
+Then run
+```
+python3 tools/ncls/download_weights.py
+```
+
+
+### FCA-Full
+```FCA-Full``` evaluates models pre-trained on full datasets with the original number of classes (e.g. 1000 in ImageNet1K). Please refer to (#download-pre-trained-model-weights) regarding the details of downloading pre-trained weights from [MMPreTrain](https://openmmlab.com/).
+
+Specify datasets, architectures and models in the ```gen_configs.yaml``` in the following format:
+```
+datasets:
+  - <DATASET>:
+      ncls: <NUMBER_OF_CLASSES>
+  ...
+
+arch:
+  <ARCHITECTURE>:
+    path: <PATH_TO_ARCHITECTURE>
+    model:
+      - <PATH_TO_MODEL>
+  ...
+```
+Example:
+```
+datasets:
+  - imagenet:
+      ncls: 1000
+  - caltech101:
+      ncls: 101
+
+arch:
+  resnet:
+    path: ./configs/resnet
+    model:
+      - resnet18_8xb32_in1k
+      - resnet34_8xb32_in1k
+      - resnet50_8xb32_in1k
+      - resnet101_8xb32_in1k
+      - resnet152_8xb32_in1k
+  vgg:
+    path: ./configs/vgg
+    model:
+      - vgg16_8xb32_in1k
+```
+Generate configuration files and evaluate pre-trained models on full datasets
+```
+python3 tools/ncls/fca-full.py
+```
+Then results will be saved in ```./work_dirs/eval```.
+
+For ```ImageNet1K``` use ```./tools/ncls/fca-full-IN1K.py```.
+
+### FCA-Sub
+#### Training sub-models
+```FCA-Sub``` generates commands to train models on subsets with fewer classes. Note that the classes in the few-class subsets are randomly sampled from the full class with seed numbers. By default, we sample 5 subsets for each number of classes (ncls). The seed starts from ```0``` and will increment by 1 for each new subset.
+
+Specify datasets, architectures and models in the ```gen_configs.yaml``` in the following format:
+```
+datasets:
+  - <DATASET>:
+      ncls: <NUMBER_OF_CLASSES>
+  ...
+
+arch:
+  <ARCHITECTURE>:
+    path: <PATH_TO_ARCHITECTURE>
+    model:
+      - <PATH_TO_MODEL>
+  ...
+```
+Example:
+```
+datasets:
+  - imagenet:
+      ncls: 1000
+  - caltech101:
+      ncls: 101
+
+arch:
+  resnet:
+    path: ./configs/resnet
+    model:
+      - resnet18_8xb32_in1k
+      - resnet34_8xb32_in1k
+      - resnet50_8xb32_in1k
+      - resnet101_8xb32_in1k
+      - resnet152_8xb32_in1k
+  vgg:
+    path: ./configs/vgg
+    model:
+      - vgg16_8xb32_in1k
+```
+
+Generate configs and train files scripts:
+```
+python3 tools/ncls/fca-sub.py
+```
+Then all training commands are generated in ```./tools/ncls/batch_train_<TIMESTAMP>.sh``` where ```<TIMESTAMP>``` will be specified by the script automatically.
+
+If you have enough hardware (e.g. GPUs) support to train all these models simultaneously, a single command would be enough:
+```
+bash ./tools/ncls/batch_train_<TIMESTAMP>.sh
+```
+However, this will easily get your server saturated. In practically, a user might want to have control of each model's training. One can simply view training scripts, copy and paste each command in the command line:
+```
+vim ./tools/ncls/batch_train_<TIMESTAMP>.sh
+```
+Example of a ```./tools/ncls/batch_train_<TIMESTAMP>.sh``` file:
+```
+CUDA_VISIBLE_DEVICES=0 nohup python3 tools/train.py ./configs/resnet/resnet18_8xb32_in1k_ncls_2_s_0.py --amp > ./training_logs/resnet18_8xb32_in1k_ncls_2_s_0_2024_03_05_21:05:05.log & 
+CUDA_VISIBLE_DEVICES=1 nohup python3 tools/train.py ./configs/resnet/resnet18_8xb32_in1k_ncls_2_s_1.py --amp > ./training_logs/resnet18_8xb32_in1k_ncls_2_s_1_2024_03_05_21:05:05.log & 
+CUDA_VISIBLE_DEVICES=2 nohup python3 tools/train.py ./configs/resnet/resnet18_8xb32_in1k_ncls_2_s_2.py --amp > ./training_logs/resnet18_8xb32_in1k_ncls_2_s_2_2024_03_05_21:05:05.log &
+...
+```
+where ```--amp``` enables ```automatic mixed precision``` training.
+
+Each experiment is written in one line. Note that by ```nohup ... &```, the training will run in the background even if you log out. Training logs (optional) are written in ```./training_logs/*.log```. If errors occur due to the non-existence of the folder ```./training_logs```, you can simply create this folder by ```mkdir ./training_logs``` and execute the training scripts again. Another log files can be found in the experiment folder under the ```./work_dirs/``` path.
+
+For ```ImageNet1K``` use ```./tools/ncls/fca-sub-IN1K.py```.
+
+
+#### Testing sub-models
+Specify datasets, architectures and models in the ```gen_configs.yaml``` in the format described in previous sections. Then run
+```
+python3 tools/ncls/fca-sub-res.py
+```
+which will search and evaluate the latest sub-models in ```./work_dirs```. Results will be saved a log file saved with a timestamp under the ```./work_dirs/eval``` folder. Each line of the log file saves one evaluation result in this format: ```<DATASET_NAME>\t<MODEL>\t<NCLS>\t<SEED>\t<TOP1>\t<TOP5>\n```.
+
+For ```ImageNet1K``` use ```./tools/ncls/fca-sub-res-IN1K.py```.
+
+### FCA-Sim
+Specify datasets in ```./tools/ncls/ncls_datasets_models_EDIT.yaml``` in the following format:
+```
+datasets:
+  - <DATASET>:
+      ncls: <NUMBER_OF_CLASSES>
+  ...
+```
+Example:
+```
+datasets:
+  - imagenet:
+      ncls: 1000
+  - caltech101:
+      ncls: 101
+```
+Specify the list of number of classes ```ncls_base_ls``` and ratios ```ncls_ratio``` in ```./tools/ncls/ncls_datasets_models_EDIT.yaml```. A complete list of number of classes will be the concatenation of ```ncls``` in ```ncls_base_ls``` and the final results of ```ncls_ratio``` multiplied by the number of classes in the full dataset (e.g. 10000 in ImageNet1K).
+
+Example:
+```
+self.ncls_base_ls = [2, 3, 4, 5, 10]
+self.ncls_ratio = [0.1, 0.2, 0.4, 0.6, 0.8]
+```
+Then a complete list of number of classes for ```ImageNet1K``` will be ```[2, 3, 4, 5, 10, 100, 200, 400, 600, 800]```. 
+
+Users can specify the similarity base function by ```-sb <SIM_BASE_FUNCTION>``` or ```-sim_base <SIM_BASE_FUNCTION>``` when executing the ```./tools/ncls/fca-sim.py``` script. The similarity base function is defined in ```class Similarity``` in ```./configs/_base_/sim.py```
+
+To use ```CLIP``` the similarity base function, run
+```
+python3 tools/ncls/fca-sim.py CLIP
+```
+To use ```dinov2``` the similarity base function, run
+```
+python3 tools/ncls/fca-sim.py dinov2
+```
+Results will be saved in a log file with a timestamp in ```./work_dirs/sim```, where each line saves results of one experiment in this format: ```<NCLS>\t<SEED>\t<S_ALPHA>\t<S_BETA>\t<S_SS>\n```.
+
+
+## Contributing
+
+We appreciate all contributions to improve Few-Class-Arena. Please fork this repository and make a pull request. We will review the changes and incorporate them into existing code.
+
+
+## Acknowledgement
+
+Few-Class-Arena is built upon the [MMPreTrain](https://openmmlab.com/) project. We thank the community for their invaluable contributions.
+
+
+## License
+
+This project is released under the [Apache 2.0 license](LICENSE).
