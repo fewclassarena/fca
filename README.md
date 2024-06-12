@@ -24,10 +24,17 @@ Few-Class-Arena (FCA) is an open platform written in PyTorch developed on top of
 
 
 ## Installation
-Locate to the target folder in your machine. Follow the instructions to install [Conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) with ```Python3.8``` version:
+Locate to the target folder in your machine. Follow the instructions to install [Conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)
+
+We provide the conda environment in ```fca.yaml```. Users can create the environment using this file by:
 ```
-conda create --name openmmlab python=3.8 -y
-conda activate openmmlab
+conda env create -f fca.yaml
+```
+
+Alternatively, users can choose to create the environment themselves. To do that, create a conda environment with ```Python3.8``` version:
+```
+conda create --name fca python=3.8 -y
+conda activate fca
 ```
 Build from this repository:
 ```
@@ -48,6 +55,10 @@ mim install mmcv==2.1.0
 
 ## Versions
 
+| python | conda | pip |
+| -- | -- | -- |
+| 3.8.18 | 4.12.0 | 23.3.1 |
+
 Below are some commonly PyTorch and CUDA versions for NVIDIA GPUs:
 
 | GPU | PyTorch | CUDA |
@@ -66,37 +77,40 @@ Please refer to [installation documentation](https://mmpretrain.readthedocs.io/e
 The following scripts are newly designed and incorporated in the existing [MMPreTrain](https://openmmlab.com/) framework:
 ```
 few-class-arena/
-    |--configs/
-        |--_base_/
-            |--datasets/
-                ...
-            |--models/
-                ...
-            |--schedules/
-            |--sim.py
-            ...
-        ...
-    |--datasets/
-        |--caltech101.py
-        |--caltech256.py
-        |--cifar100.py
-        |--cub200.py
-        |--ds.yaml
-        |--food101.py
-        |--gtsrb43.py
-        |--indoor67.py
-        |--sun397.py
-        |--textures47.py
-    |--dataset_converters/
-        |--convert_imagenet_ncls.py
-        |--convert_imagenet_noclsdir.py
-        |--convert_ncls.py
-    |--tools/
-        |--ncls/
-            |--config_to_url.yaml
-            |--download_weights.py
-            |--gen_configs.yaml
-            |--ncls_datasets_models_EDIT.yaml
+    ├── configs/
+    │   ├── _base_/
+    │   │   ├── datasets/
+    │   │   │   ...
+    │   │   ├── models/
+    │   │   │   ...
+    │   │   ├── schedules/
+    │   │   ├── sim.py
+    │   └── ...
+    ├── datasets/
+    │   ├── caltech101.py
+    │   ├── caltech256.py
+    │   ├── cifar100.py
+    │   ├── cub200.py
+    │   ├── ds.yaml
+    │   ├── food101.py
+    │   ├── gtsrb43.py
+    │   ├── indoor67.py
+    │   ├── sun397.py
+    │   ├── textures47.py
+    |   └── ...
+    ├── dataset_converters/
+    │   ├── convert_imagenet_ncls.py
+    │   ├── convert_imagenet_noclsdir.py
+    │   ├── convert_ncls.py
+    │   └── ...
+    ├── tools/
+    │   ├── ncls/
+    │   │   ├── config_to_url.yaml
+    │   │   ├── download_weights.py
+    │   │   ├── gen_configs.yaml
+    │   │   ├── ncls_datasets_models_EDIT.yaml
+    |   └── ...
+    └── ...
 ```
 The usage of each file will be illustrated in the following user guidelines.
 
@@ -171,6 +185,28 @@ Example:
 ```
 meta_data_root: /datasets
 ```
+
+The dataset format follows the convension of ImageNet:
+```
+imagenet1k/
+    ├── meta
+    │   ├── train.txt
+    │   └── val.txt
+    ├── train
+    │   ├── <IMAGE_ID>.jpeg
+    │   └── ...
+    └── val
+        ├── <IMAGE_ID>.jpeg
+        └── ...
+```
+where a ```.txt``` file stores a pair of image id and and class number in each row in the following format
+```
+<IMAGE_ID>.jpeg <CLASS_NUM>
+```
+We follow the same ```train/val``` splits when the original dataset has already provided. If the dataset does not have explicit splits, we first assign image IDs to all images, starting from 0, and select ```4/5``` of all images as training set and put the rest in the validation set. Specifially, when an image whose ID satisfies the condition ```ID % 5 == 0```, it will be moved to the validation set. Otherwise, it will be assigned as a training sample.
+
+
+
 Specify datasets, the number of classes in each full dataset, and the models and model EDIT files in ```./tools/ncls/ncls_datasets_models_EDIT.yaml``` in the following format:
 ```
 datasets:
@@ -378,15 +414,15 @@ self.ncls_ratio = [0.1, 0.2, 0.4, 0.6, 0.8]
 ```
 Then a complete list of number of classes for ```ImageNet1K``` will be ```[2, 3, 4, 5, 10, 100, 200, 400, 600, 800]```. 
 
-Users can specify the similarity base function by ```-sb <SIM_BASE_FUNCTION>``` or ```-sim_base <SIM_BASE_FUNCTION>``` when executing the ```./tools/ncls/fca-sim.py``` script. The similarity base function is defined in ```class Similarity``` in ```./configs/_base_/sim.py```
+Users can specify the similarity base function by ```-sb <SIM_BASE_FUNCTION>``` or ```--sim_base <SIM_BASE_FUNCTION>``` when executing the ```./tools/ncls/fca-sim.py``` script. The similarity base function is defined in ```class Similarity``` in ```./configs/_base_/sim.py```
 
 To use ```CLIP``` the similarity base function, run
 ```
-python3 tools/ncls/fca-sim.py CLIP
+python3 tools/ncls/fca-sim.py -sb CLIP
 ```
 To use ```dinov2``` the similarity base function, run
 ```
-python3 tools/ncls/fca-sim.py dinov2
+python3 tools/ncls/fca-sim.py -sb dinov2
 ```
 Results will be saved in a log file with a timestamp in ```./work_dirs/sim```, where each line saves results of one experiment in this format: ```<NCLS>\t<SEED>\t<S_ALPHA>\t<S_BETA>\t<S_SS>\n```.
 
