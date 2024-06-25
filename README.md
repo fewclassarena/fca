@@ -41,9 +41,10 @@ conda activate fca
 ```
 Build from this repository:
 ```
-git clone https://github.com/few-class-arena/few-class-arena
-cd few-class-arena
+git clone https://github.com/fewclassarena/fca
+cd fca
 pip install -e .
+pip install transformers
 ```
 In case bugs occur, follow the instructions (in https://mmpretrain.readthedocs.io/en/latest/get_started.html#installation) to install [OpenMMLab](https://openmmlab.com/) (where ```Few-Class Arena``` is built upon) from scratch:
 ```
@@ -79,7 +80,7 @@ Please refer to [installation documentation](https://mmpretrain.readthedocs.io/e
 ## Repository Structure
 The following scripts are newly designed and incorporated in the existing [MMPreTrain](https://openmmlab.com/) framework:
 ```
-few-class-arena/
+fca/
     ├── configs/
     │   ├── _base_/
     │   │   ├── datasets/
@@ -120,7 +121,7 @@ The usage of each file will be illustrated in the following user guidelines.
 ## User Guidelines
 Note that all scripts run in this main directory:
 ```
-cd few-class-arena
+cd fca
 ```
 
 
@@ -437,7 +438,7 @@ We appreciate all contributions to improve Few-Class-Arena. Please fork this rep
 
 ## Acknowledgement
 
-Few-Class-Arena is built upon the [MMPreTrain](https://openmmlab.com/) project. We thank the community for their invaluable contributions.
+Few-Class-Arena (fca) is built upon the [MMPreTrain](https://openmmlab.com/) project. We thank the community for their invaluable contributions.
 
 
 ## License
