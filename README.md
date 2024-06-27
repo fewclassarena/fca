@@ -128,7 +128,7 @@ cd fca
 ### Generate configs for datasets and models
 Specify ```meta_data_root``` in
 ```
-tools/ncls/datasets/ds.yaml
+./tools/ncls/datasets/ds.yaml
 ```
 Download datasets:
 ```
@@ -180,7 +180,7 @@ python3 tools/ncls/gen_ncls_models_configs_EDIT.py
 
 
 ### Convert the dataset format
-Specify ```meta_data_root``` where the meta data root is located in your current file system in ```datasets/ds.yaml``` in the following format:
+Specify ```meta_data_root``` where the meta data root is located in your current file system in ```./tools/ncls/datasets/ds.yaml``` in the following format:
 ```
 meta_data_root: '<PATH_TO_DATASETS>'
 ```
@@ -253,7 +253,7 @@ bash tools/ncls/gen_ncls_meta_files.sh
 
 
 ### Download pre-trained model weights
-Specify the models and links to download in ```tools/ncls/config_to_url.yaml``` in the following format:
+Specify the models and links to download in ```./tools/ncls/config_to_url.yaml``` in the following format:
 ```
 <MODEL>: <LINK_OF_WEIGHTS>
 ```
@@ -271,7 +271,7 @@ python3 tools/ncls/download_weights.py
 ### FCA-Full
 ```FCA-Full``` evaluates models pre-trained on full datasets with the original number of classes (e.g. 1000 in ImageNet1K). Please refer to (#download-pre-trained-model-weights) regarding the details of downloading pre-trained weights from [MMPreTrain](https://openmmlab.com/).
 
-Specify datasets, architectures, and models in the ```gen_configs.yaml``` in the following format:
+Specify datasets, architectures, and models in the ```./tools/ncls/gen_configs.yaml``` in the following format:
 ```
 datasets:
   - <DATASET>:
@@ -319,7 +319,7 @@ For ```ImageNet1K``` use ```./tools/ncls/fca-full-IN1K.py```.
 #### Training sub-models
 ```FCA-Sub``` generates commands to train models on subsets with fewer classes. Note that the classes in the few-class subsets are randomly sampled from the full class using seed numbers. By default, we sample 5 subsets for each number of classes (ncls). The seed starts from ```0``` and will increment by 1 for each new subset.
 
-Specify datasets, architectures and models in the ```gen_configs.yaml``` in the following format:
+Specify datasets, architectures and models in the ```./tools/ncls/gen_configs.yaml``` in the following format:
 ```
 datasets:
   - <DATASET>:
@@ -385,7 +385,7 @@ For ```ImageNet1K``` use ```./tools/ncls/fca-sub-IN1K.py```.
 
 
 #### Testing sub-models
-Specify datasets, architectures, and models in the ```gen_configs.yaml``` in the format described in previous sections. Then run
+Specify datasets, architectures, and models in the ```./tools/ncls/gen_configs.yaml``` in the format described in previous sections. Then run
 ```
 python3 tools/ncls/fca-sub-res.py
 ```
