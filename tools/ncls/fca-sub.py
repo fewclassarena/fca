@@ -132,10 +132,30 @@ def gen_configs():
                                                 line = line.replace('EDIT', dataset_name)
                                             if 'edit' in line:
                                                 if 'num_classes=' in line:
+                                                    # Calculate the number of left brackets to fill right brackets after editing
+                                                    n_bracket = 0
+                                                    ncls_idx = line.index('num_classes')
+                                                    for c in line[:ncls_idx]:
+                                                        if c == '(': n_bracket += 1
+                                                        elif c == ')': n_bracket -= 1
+
+                                                    # Check if comma should be added later
+                                                    comma = False
+                                                    for c in line[ncls_idx:]:
+                                                        if c == ',': comma = True
+
+                                                    line = line[:ncls_idx + len('num_classes')]
+                                                    line = line + f'={total_ncls}'
+                                                    for b in range(n_bracket):
+                                                        line = line + ')'
+                                                    if comma: line = line + ', # edit \n'
+                                                    else: line = line + ' # edit \n'
+                                                    '''
                                                     if '(' in line:
-                                                        line = line.replace('num_classes=', f'num_classes={total_ncls}) #')
+                                                        line = line.replace('num_classes=', f'num_classes={total_ncls}), #')
                                                     else:
                                                         line = line.replace('num_classes=', f'num_classes={total_ncls}, #')
+                                                    '''
                                                 if 'data_root' in line:
                                                     line = line.replace("data_root=''", f"data_root='{C.meta_data_root}/{dataset_name}'")
                                                 if 'ann_file' in line:
