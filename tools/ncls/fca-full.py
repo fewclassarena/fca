@@ -264,7 +264,7 @@ def gen_configs_and_eval():
                             # eval >>>
                             print(f'\nmodel: {model}')
                             # model_key = model.split('_')[0]
-                            model_dataset_dir = './work_dirs/' + model_ORI_path[model_ORI_path.rindex('/') + 1:].replace('EDIT', dataset_name)[:-3]
+                            model_dataset_dir = f'{C.work_dir}/' + model_ORI_path[model_ORI_path.rindex('/') + 1:].replace('EDIT', dataset_name)[:-3]
                             print('\nmodel_dataset_dir: ', model_dataset_dir)
                             # e.g. ./configs/resnet/resnet50_8xb32_in1k_imagenet
                             
