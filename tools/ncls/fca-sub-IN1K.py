@@ -1,7 +1,3 @@
-'''
-Usage:
-python3 tools/ncls/fca_eval.py
-'''
 import os
 import argparse
 import copy

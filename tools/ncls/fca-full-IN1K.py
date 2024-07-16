@@ -1,8 +1,3 @@
-'''
-Usage:
-python3 tools/ncls/fca_eval.py
-'''
-
 import os
 import sys
 from datetime import datetime
