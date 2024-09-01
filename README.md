@@ -12,6 +12,9 @@ A platform for conducting research in the few-class regime.
 
 ## Introduction
 
+<img align="center" width="640" alt="overview" src="https://github.com/user-attachments/assets/65f64a13-8efd-4b3d-b0fa-221dbbe7e5ca">
+
+
 Few-Class-Arena (FCA) is an open platform written in PyTorch developed on top of the [OpenMMLab](https://openmmlab.com/) project. It provides an open source toolbox for conducting research in the few-class regime (classification and detection systems whose dataset consists of few classes, typically <10). FCA encapsulates the underlying tedious coding and configurations for each experiment, and it provides a convenient interface for users to conduct large-scale experiments in batch. It saves a large amount of time for researchers by omitting the steps of manually conducting experiments and gathering results from each individual experiment independently. Users can enjoy these features by specifying the configurations for different tasks including training and evaluation.
 
 ![fca_fig1](https://github.com/fewclassarena/fca/assets/165857143/c9f7ed91-c04d-49ce-a814-8d2eda18c353)
