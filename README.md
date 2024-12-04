@@ -388,6 +388,10 @@ Each experiment is written in one line. Note that by ```nohup ... &```, the trai
 
 For ```ImageNet1K``` use ```./tools/ncls/fca-sub-IN1K.py```.
 
+#### Fine-Tuning sub-models
+```
+python3 tools/train.py ./configs/<MODEL_CONFIG>.py --amp --resume <PATH_TO_FULL_MODEL_WEIGHTS>
+```
 
 #### Testing sub-models
 Specify datasets, architectures, and models in the ```./tools/ncls/gen_configs.yaml``` in the format described in previous sections. Then run
