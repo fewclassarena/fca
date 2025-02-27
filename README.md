@@ -68,11 +68,8 @@ mim install mmcv==2.1.0
 | -- | -- | -- |
 | 3.8.18 | 4.12.0 | 23.3.1 |
 
-Below are some commonly PyTorch and CUDA versions for NVIDIA GPUs:
-
 | GPU | PyTorch | CUDA |
 | -- | -- | -- |
-| NVIDIA TITAN Xp | 12.1 | cu121 |
 | NVIDIA RTX A5000 | 1.9.1 | cu111 |
 
 The version information can be obtained by:
@@ -447,7 +444,7 @@ We appreciate all contributions to improve Few-Class-Arena. Please fork this rep
 
 ## Acknowledgement
 
-Few-Class-Arena (fca) is built upon the [MMPreTrain](https://openmmlab.com/) project. We thank the community for their invaluable contributions.
+Few-Class-Arena (FCA) is built upon the [MMPreTrain](https://openmmlab.com/) project. We thank the community for their invaluable contributions.
 
 
 ## License
