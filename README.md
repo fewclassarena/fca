@@ -1,4 +1,8 @@
-# Few-Class Arena
+# <div align="center"> Few-Class Arena </div>
+#### News
+- 2025.01.22 Our Few-Class Arena (FCA) paper ([arXiv 2411.01099](https://arxiv.org/pdf/2411.01099)) has been accepted to ICLR 2025 😄!
+
+Authors: Bryan Bo Cao, Lawrence O’Gorman, Michael Coss, Shubham Jain
 
 A platform for conducting research in the few-class regime.
 
@@ -11,9 +15,9 @@ A platform for conducting research in the few-class regime.
 
 
 ## Introduction
-
+<div aligh="center">
 <img align="center" width="640" alt="overview" src="https://github.com/user-attachments/assets/65f64a13-8efd-4b3d-b0fa-221dbbe7e5ca">
-
+</div>
 
 Few-Class-Arena (FCA) is an open platform written in PyTorch developed on top of the [OpenMMLab](https://openmmlab.com/) project. It provides an open source toolbox for conducting research in the few-class regime (classification and detection systems whose dataset consists of few classes, typically <10). FCA encapsulates the underlying tedious coding and configurations for each experiment, and it provides a convenient interface for users to conduct large-scale experiments in batch. It saves a large amount of time for researchers by omitting the steps of manually conducting experiments and gathering results from each individual experiment independently. Users can enjoy these features by specifying the configurations for different tasks including training and evaluation.
 
@@ -446,6 +450,17 @@ We appreciate all contributions to improve Few-Class-Arena. Please fork this rep
 
 Few-Class-Arena (FCA) is built upon the [MMPreTrain](https://openmmlab.com/) project. We thank the community for their invaluable contributions.
 
+## Citation
+```
+@misc{fewclassarena2025,
+  author = {Few-Class Arena Contributors},
+  title = {Few-Class Arena: A Benchmark for Few-Class Learning},
+  year = {2025},
+  howpublished = {\url{https://github.com/fewclassarena/fca}},
+  note = {Accessed: 2025-02-27}
+}
+```
+Note change the access date.
 
 ## License
 
