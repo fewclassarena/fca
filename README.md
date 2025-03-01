@@ -1,6 +1,7 @@
 # <div align="center"> Few-Class Arena </div>
+
 #### News
-- 2025.01.22 Our Few-Class Arena (FCA) paper ([arXiv 2411.01099](https://arxiv.org/pdf/2411.01099)) has been accepted to ICLR 2025 😄!
+- 2025.01.22 Our Few-Class Arena (FCA) paper ([arXiv 2411.01099](https://arxiv.org/pdf/2411.01099) | [OpenReview](https://openreview.net/pdf?id=2ET561DyPe)) has been accepted to ICLR 2025 😄!
 
 Authors: Bryan Bo Cao, Lawrence O’Gorman, Michael Coss, Shubham Jain
 
@@ -451,6 +452,14 @@ We appreciate all contributions to improve Few-Class-Arena. Please fork this rep
 Few-Class-Arena (FCA) is built upon the [MMPreTrain](https://openmmlab.com/) project. We thank the community for their invaluable contributions.
 
 ## Citation
+```
+@article{cao2024few,
+  title={Few-Class Arena: A Benchmark for Efficient Selection of Vision Models and Dataset Difficulty Measurement},
+  author={Cao, Bryan Bo and O'Gorman, Lawrence and Coss, Michael and Jain, Shubham},
+  journal={arXiv preprint arXiv:2411.01099},
+  year={2024}
+}
+```
 ```
 @misc{fewclassarena2025,
   author = {Few-Class Arena Contributors},
