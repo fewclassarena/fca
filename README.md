@@ -271,8 +271,8 @@ python3 tools/ncls/download_weights.py
 ```
 
 
-### FCA-Full
-```FCA-Full``` evaluates models pre-trained on full datasets with the original number of classes (e.g. 1000 in ImageNet1K). Please refer to (#download-pre-trained-model-weights) regarding the details of downloading pre-trained weights from [MMPreTrain](https://openmmlab.com/).
+### FC-Full
+```FC-Full``` evaluates models pre-trained on full datasets with the original number of classes (e.g. 1000 in ImageNet1K). Please refer to (#download-pre-trained-model-weights) regarding the details of downloading pre-trained weights from [MMPreTrain](https://openmmlab.com/).
 
 Specify datasets, architectures, and models in the ```./tools/ncls/gen_configs.yaml``` in the following format:
 ```
@@ -312,15 +312,15 @@ arch:
 ```
 Generate configuration files and evaluate pre-trained models on full datasets
 ```
-python3 tools/ncls/fca-full.py
+python3 tools/ncls/fc-full.py
 ```
 Then results will be saved in ```./work_dirs/eval```.
 
-For ```ImageNet1K``` use ```./tools/ncls/fca-full-IN1K.py```.
+For ```ImageNet1K``` use ```./tools/ncls/fc-full-IN1K.py```.
 
-### FCA-Sub
+### FC-Sub
 #### Training sub-models
-```FCA-Sub``` generates commands to train models on subsets with fewer classes. Note that the classes in the few-class subsets are randomly sampled from the full class using seed numbers. By default, we sample 5 subsets for each number of classes (ncls). The seed starts from ```0``` and will increment by 1 for each new subset.
+```FC-Sub``` generates commands to train models on subsets with fewer classes. Note that the classes in the few-class subsets are randomly sampled from the full class using seed numbers. By default, we sample 5 subsets for each number of classes (ncls). The seed starts from ```0``` and will increment by 1 for each new subset.
 
 Specify datasets, architectures and models in the ```./tools/ncls/gen_configs.yaml``` in the following format:
 ```
@@ -361,7 +361,7 @@ arch:
 
 Generate configs and train files scripts:
 ```
-python3 tools/ncls/fca-sub.py
+python3 tools/ncls/fc-sub.py
 ```
 Then all training commands are generated in ```./tools/ncls/batch_train_<TIMESTAMP>.sh``` where ```<TIMESTAMP>``` will be specified by the script automatically.
 
@@ -384,7 +384,7 @@ where ```--amp``` enables ```automatic mixed precision``` training.
 
 Each experiment is written in one line. Note that by ```nohup ... &```, the training will run in the background even if you log out. Training logs (optional) are written in ```./training_logs/*.log```. If errors occur due to the non-existence of the folder ```./training_logs```, you can simply create this folder by ```mkdir ./training_logs``` and execute the training scripts again. Another log files can be found in the experiment folder under the ```./work_dirs/``` path.
 
-For ```ImageNet1K``` use ```./tools/ncls/fca-sub-IN1K.py```.
+For ```ImageNet1K``` use ```./tools/ncls/fc-sub-IN1K.py```.
 
 #### Fine-Tuning sub-models
 ```
@@ -394,13 +394,13 @@ python3 tools/train.py ./configs/<MODEL_CONFIG>.py --amp --resume <PATH_TO_FULL_
 #### Testing sub-models
 Specify datasets, architectures, and models in the ```./tools/ncls/gen_configs.yaml``` in the format described in previous sections. Then run
 ```
-python3 tools/ncls/fca-sub-res.py
+python3 tools/ncls/fc-sub-res.py
 ```
 which will search and evaluate the latest sub-models in ```./work_dirs```. Results will be saved in a log file with a timestamp under the ```./work_dirs/eval``` folder. Each line of the log file saves one evaluation result in this format: ```<DATASET_NAME>\t<MODEL>\t<NCLS>\t<SEED>\t<TOP1>\t<TOP5>\n```.
 
-For ```ImageNet1K``` use ```./tools/ncls/fca-sub-res-IN1K.py```.
+For ```ImageNet1K``` use ```./tools/ncls/fc-sub-res-IN1K.py```.
 
-### FCA-Sim
+### FC-Sim
 Specify datasets in ```./tools/ncls/ncls_datasets_models_EDIT.yaml``` in the following format:
 ```
 datasets:
@@ -425,15 +425,15 @@ self.ncls_ratio = [0.1, 0.2, 0.4, 0.6, 0.8]
 ```
 Then a complete list of number of classes for ```ImageNet1K``` will be ```[2, 3, 4, 5, 10, 100, 200, 400, 600, 800]```. 
 
-Users can specify the similarity base function by ```-sb <SIM_BASE_FUNCTION>``` or ```--sim_base <SIM_BASE_FUNCTION>``` when executing the ```./tools/ncls/fca-sim.py``` script. The similarity base function is defined in ```class Similarity``` in ```./configs/_base_/sim.py```
+Users can specify the similarity base function by ```-sb <SIM_BASE_FUNCTION>``` or ```--sim_base <SIM_BASE_FUNCTION>``` when executing the ```./tools/ncls/fc-sim.py``` script. The similarity base function is defined in ```class Similarity``` in ```./configs/_base_/sim.py```
 
 To use ```CLIP``` the similarity base function, run
 ```
-python3 tools/ncls/fca-sim.py -sb CLIP
+python3 tools/ncls/fc-sim.py -sb CLIP
 ```
 To use ```dinov2``` the similarity base function, run
 ```
-python3 tools/ncls/fca-sim.py -sb dinov2
+python3 tools/ncls/fc-sim.py -sb dinov2
 ```
 Results will be saved in a log file with a timestamp in ```./work_dirs/sim```, where each line saves results of one experiment in this format: ```<NCLS>\t<SEED>\t<S_ALPHA>\t<S_BETA>\t<S_SS>\n```.
 
