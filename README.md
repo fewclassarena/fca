@@ -1,7 +1,8 @@
 # <div align="center"> Few-Class Arena </div>
 
 #### News
-- 2025.01.22 Our Few-Class Arena (FCA) paper ([arXiv 2411.01099](https://arxiv.org/pdf/2411.01099) | [OpenReview](https://openreview.net/pdf?id=2ET561DyPe)) has been accepted to ICLR 2025 😄!
+- 2025.03.01 This repository has been moved to [github.com/bryanbocao/fca](https://github.com/bryanbocao/fca) and will be maintained by [github.com/bryanbocao](https://github.com/bryanbocao).
+- 2025.01.22 Our Few-Class Arena (FCA) paper ([arXiv 2411.01099](https://arxiv.org/pdf/2411.01099) | [OpenReview](https://openreview.net/pdf?id=2ET561DyPe)) has been accepted to **ICLR 2025** 😄!
 
 Authors: Bryan Bo Cao, Lawrence O’Gorman, Michael Coss, Shubham Jain
 
