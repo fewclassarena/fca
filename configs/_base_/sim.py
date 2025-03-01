@@ -113,8 +113,8 @@ class Similarity:
         print('\ncls_ls: ', cls_ls)
         
         sim_beta_ls = []
-        # ============================
-        # Iterate over all classe >>>
+        # =============================
+        # Iterate over all classes >>>
         cls_i = 0
         while cls_i < len(cls_ls):
             img_id_ls_cls_i = self.cls_id_to_img_id_ls_dict[str(cls_ls[cls_i])]
@@ -158,8 +158,8 @@ class Similarity:
             # Iterate over all classes different from cls_i <<<
             # ==================================================
             cls_i += 1
-        # Iterate over all classe <<<
-        # ============================
+        # Iterate over all classes <<<
+        # =============================
         sim_beta = np.mean(sim_beta_ls)
         print('\nsim_beta: ', sim_beta)
         return sim_beta
@@ -175,8 +175,8 @@ class Similarity:
         print('\ncls_ls: ', cls_ls)
 
         sim_SS_ls = []
-        # ============================
-        # Iterate over all classe >>>
+        # =============================
+        # Iterate over all classes >>>
         cls_a_p = 0
         while cls_a_p < len(cls_ls):
             img_id_ls_cls_a_p = self.cls_id_to_img_id_ls_dict[str(cls_ls[cls_a_p])]
@@ -205,15 +205,15 @@ class Similarity:
                 sim_c_p_ls = [] # a list of similarity scores for sample i and other classes
                 cls_c_p = 0 # cls_c_p: class index of the class other than a_p
                 while cls_c_p < len(cls_ls):
-                    if cls_c_p != cls_a_p:
+                    if cls_c_p != cls_a_p: # cls_c_p is a different class than cls_a_p
                         img_id_ls_cls_c_p = self.cls_id_to_img_id_ls_dict[str(cls_ls[cls_c_p])]
-                        # ===========================================================
-                        # Iterate over all images in a_p different class cls_c_p >>>
+                        # =================================================
+                        # Iterate over all images in the class cls_c_p >>>
                         sim_c_p_ls_cls_c_p = []
                         for img_id_c_p in img_id_ls_cls_c_p:
                             sim_c_p_ls_cls_c_p.append(self.cos_sim(self.img_id_to_feats_dict[img_id_i][0], self.img_id_to_feats_dict[img_id_c_p][0]))
-                        # Iterate over all images in a_p different class cls_c_p <<<
-                        # ===========================================================
+                        # Iterate over all images in the class cls_c_p <<<
+                        # =================================================
                         sim_c_p_ls.append(np.mean(sim_c_p_ls_cls_c_p))
                     cls_c_p += 1
 
@@ -228,9 +228,9 @@ class Similarity:
                 i += 1
             # Iterate over all images in cls_a_p <<<
             # =======================================
-            cls_a_p +=1 
-        # Iterate over all classe <<<
-        # ============================
+            cls_a_p +=1
+        # Iterate over all classes <<<
+        # =============================
         return np.mean(sim_SS_ls)
 
  
