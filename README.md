@@ -69,13 +69,9 @@ mim install mmcv==2.1.0
 
 ## Versions
 
-| python | conda | pip |
-| -- | -- | -- |
-| 3.8.18 | 4.12.0 | 23.3.1 |
-
-| GPU | PyTorch | CUDA |
-| -- | -- | -- |
-| NVIDIA RTX A5000 | 1.9.1 | cu111 |
+| Python | PyTorch | Conda | Pip | CUDA | GPU |
+| -- | -- | -- | -- | -- | -- |
+| 3.8.18 | 1.9.1 | 4.12.0 | 23.3.1 | cu111 | NVIDIA RTX A5000 |
 
 The version information can be obtained by:
 ```
